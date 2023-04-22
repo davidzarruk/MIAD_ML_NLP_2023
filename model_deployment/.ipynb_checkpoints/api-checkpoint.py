@@ -1,4 +1,6 @@
 #!/usr/bin/python
+!pip3 install pandas
+
 from flask import Flask
 from flask_restx import Api, Resource, fields
 import joblib

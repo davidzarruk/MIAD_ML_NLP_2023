@@ -3,6 +3,7 @@ from flask import Flask
 from flask_restx import Api, Resource, fields
 import joblib
 from flask_cors import CORS
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes and origins

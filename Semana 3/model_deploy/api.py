@@ -1,6 +1,5 @@
-#!/usr/bin/python
 from flask import Flask
-from flask_restplus import Api, Resource, fields
+from flask_restx import Api, Resource, fields
 from model_deployment import predict, CategoricalEncoder, DataFrameSelector
 
 app = Flask(__name__)
@@ -8,11 +7,11 @@ app = Flask(__name__)
 api = Api(
     app,
     version='1.0',
-    title='Project1 Prediction API',
-    description='Project1 Prediction API')
+    title='Prediction API',
+    description='Prediction API')
 
 ns = api.namespace('predict',
-                   description='Project1 Regressor')
+                   description='Regressor')
 
 parser = api.parser()
 
@@ -38,4 +37,4 @@ class ModelApi(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=8888)
+    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5000)

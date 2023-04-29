@@ -4,6 +4,9 @@ from flask_restx import Api, Resource, fields
 import joblib
 from flask_cors import CORS
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import OrdinalEncoder
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes and origins

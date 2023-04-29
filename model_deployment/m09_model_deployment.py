@@ -4,28 +4,34 @@ import pandas as pd
 import joblib
 import sys
 import os
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+import joblib
+import os
+os.chdir('..')
+from xgboost import XGBRegressor
+from sklearn.preprocessing import OrdinalEncoder
 
-def predict_proba(url):
 
-    clf = joblib.load(os.path.dirname(__file__) + '/phishing_clf.pkl') 
+# Carga de datos de archivo .csv
+dataTraining = pd.read_csv('https://raw.githubusercontent.com/davidzarruk/MIAD_ML_NLP_2023/main/datasets/dataTrain_carListings.zip')
+dataTesting = pd.read_csv('https://raw.githubusercontent.com/davidzarruk/MIAD_ML_NLP_2023/main/datasets/dataTest_carListings.zip', index_col=0)
 
-    url_ = pd.DataFrame([url], columns=['url'])
-  
-    # Create features
-    keywords = ['https', 'login', '.php', '.html', '@', 'sign']
-    for keyword in keywords:
-        url_['keyword_' + keyword] = url_.url.str.contains(keyword).astype(int)
+dataTotal= pd.concat([dataTraining,dataTesting], axis=0)
+enc = OrdinalEncoder()
+dataTotal[['State','Make','Model']] = enc.fit_transform(dataTotal[['State','Make','Model']])
 
-    url_['lenght'] = url_.url.str.len() - 2
-    domain = url_.url.str.split('/', expand=True).iloc[:, 2]
-    url_['lenght_domain'] = domain.str.len()
-    url_['isIP'] = (url_.url.str.replace('.', '') * 1).str.isnumeric().astype(int)
-    url_['count_com'] = url_.url.str.count('com')
+X=dataTotal.iloc[:400000,:].drop(['Price'], axis=1)
+y=dataTraining['Price']
 
-    # Make prediction
-    p1 = clf.predict_proba(url_.drop('url', axis=1))[0,1]
+XTest=dataTotal.iloc[400000:,:].drop(['Price'], axis=1)
 
-    return p1
+clf = XGBRegressor(max_depth=10, n_estimators=100, gamma=0, learning_rate=0.2,random_state=1)
+clf.fit(X, y)
+
+
+joblib.dump(clf, 'Price_Car_Grupo4.pkl', compress=3)
 
 
 if __name__ == "__main__":

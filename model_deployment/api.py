@@ -36,7 +36,7 @@ resource_fields = api.model('Resource', {
 def predict_price(url):
 
     #clf = joblib.load('Price_Car_Grupo4.pkl') 
-    clf = joblib.load('model_deployment/Price_Car_Grupo4.pkl')
+    clf = joblib.load('Price_Car_Grupo4.pkl')
     #a = url.split('-')
     url_ = pd.DataFrame(url).transpose()
     url_.columns=['Year', 'Mileage', 'State', 'Make', 'Model']
